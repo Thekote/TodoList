@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<meta http-equiv="Content-Type"
+		content="application/xhtml+xml; charset=utf-8" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=yes" />
+	<meta name="description" content="Todo" />
+	<meta name="author" content="Guilherme Lima" />
+
+	<h:outputStylesheet name="primeicons/primeicons.css"
+		library="primefaces" />
+
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		crossorigin="anonymous" />
+
+		<style>
+			.completed span {
+				text-decoration: line-through;
+				color: #aaa;
+			}
+			
+		    .white-button.ui-button.ui-state-default {
+		        background-color: #ffffff;
+		        color: #222222;
+		        border-color: #d6d6d6;
+		        /* with the exported variables from Nova and Luna Themes*/
+		        border-color: var(--input-border-color, #d6d6d6);
+		    }
+		 
+		    .white-button.ui-button.ui-state-default:enabled:hover, 
+		    .white-button.ui-button.ui-state-default:focus {
+		        background-color: #f2f2f2;
+		        border-color: #ccc;
+		        color: #373a3c;
+		        /* with the exported variables from Nova and Luna Themes*/
+		        border-color: var(--input-hover-border-color, #ccc);
+		    }
+			
+			.green-button.ui-button.ui-state-default {
+				background-color: #5cb85c;
+				border-color: #5cb85c;
+				color: #fff;
+			}
+			
+			.green-button.ui-button.ui-state-default:enabled:hover, .green-button.ui-button.ui-state-default:focus
+				{
+				background-color: #4cae4c;
+				border-color: #5cb85c;
+			}
+			
+			.red-button.ui-button.ui-state-default {
+				background-color: #d9534f;
+				border-color: #d9534f;
+				color: #fff;
+			}
+			
+			.red-button.ui-button.ui-state-default:enabled:hover, .red-button.ui-button.ui-state-default:focus
+				{
+				background-color: #d43f3a;
+				border-color: #d9534f;
+			}
+	</style>
+</h:head>
+<h:body>
+
+	<div class="jumbotron">
+	<h2 class="text-center">ToDo List</h2>
+</div>
+	<div class="container">
+		<h:form>
+			<p:defaultCommand target="save"/>
+			<div class="row mb-3">
+				<div class="offset-md-2 col-md-8">
+					<div class="ui-g ui-fluid">
+						<div class="ui-inputgroup w-100">
+							<p:commandButton action="#{todoMB.edit(null)}" update="@form"  
+								icon="pi pi-times" styleClass="white-button" rendered="#{todoMB.todo.id != null}" />
+							<p:inputText value="#{todoMB.todo.description}" id="input" />
+							<p:commandButton action="#{todoMB.save}" update="@form"
+								styleClass="green-button" icon="pi pi-save" id="save" />
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+
+			<p:dataTable id="table" var="todo" value="#{todoMB.todos}">
+				<p:column headerText="Todo">
+					<p:selectBooleanCheckbox value="#{todo.completed}"
+						itemLabel="##{todo.id} - #{todo.description}"
+						styleClass="#{todo.completed ? 'completed' : ''}">
+						<p:ajax update="table" listener="#{todoMB.toggle(todo)}" />
+					</p:selectBooleanCheckbox>
+				</p:column>
+
+				<p:column style="text-align: center; width: 150px;">
+					<p:commandButton action="#{todoMB.edit(todo)}"
+						update="@form table" icon="pi pi-pencil" />
+					<p:commandButton action="#{todoMB.delete(todo)}" update="table" styleClass="red-button"
+						icon="pi pi-trash" />
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
+	</div>
+</h:body>
+</html>
