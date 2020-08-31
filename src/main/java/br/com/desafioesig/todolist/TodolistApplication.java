@@ -7,8 +7,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.Ordered;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.context.ServletContextAware;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @EnableJpaRepositories
@@ -35,4 +37,10 @@ public class TodolistApplication implements WebMvcConfigurer, ServletContextAwar
         servletContext.setInitParameter("javax.faces.FACELETS_REFRESH_PERIOD", "0");
     }
 
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("forward:/index.xhtml");
+        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    }
 }
